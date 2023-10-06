@@ -9,8 +9,9 @@ namespace Capstone.Classes
         public void Run()
         {
             //here we'll do the console writelines and readlines
-            FileFunction file = new FileFunction("vendingmachine.csv");
-            Dictionary<string, Stack<Item>> vendingMachine = file.LoadUpFile();
+            VendingMachine vendoMatic = new VendingMachine("vendingmachine.csv");
+            //Dictionary<string, Stack<Item>> vendingMachine = file.LoadUpFile();
+            vendoMatic.GetInventory();
         }
     }
 }

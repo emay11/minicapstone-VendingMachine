@@ -9,6 +9,7 @@ namespace Capstone
         {
             UI vendingMachine = new UI();
             vendingMachine.Run();
+
         }
     }
 }
