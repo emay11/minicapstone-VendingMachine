@@ -14,7 +14,7 @@ namespace Capstone.Classes
 			{
                 using (StreamWriter sw = new StreamWriter("SalesLog.txt", true))
                 {
-                    sw.WriteLine($"{DateTime.UtcNow} {text} ${value} ${balance}");
+                    sw.WriteLine($"{DateTime.UtcNow} {text} ${value:C2} ${balance:C2}");
                 }
 			}
 			catch (Exception e)

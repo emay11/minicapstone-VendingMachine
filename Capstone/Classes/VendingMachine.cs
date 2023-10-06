@@ -20,35 +20,34 @@ namespace Capstone.Classes
         {
             return Balance;
         }
-        
+
         public decimal AddMoney(decimal value)
         {
             Balance += value;
-            SalesLog.WriteLog("FEED MONEY:",value, Balance);
+            SalesLog.WriteLog("FEED MONEY:", value, Balance);
             return Balance;
         }
-        
+
         public bool SubtractMoney(decimal value)
         {
             if (Balance >= value)
             {
                 Balance -= value;
-                Console.WriteLine("Your balance is now $" + Balance);
                 return true;
             }
             else
             {
-                Console.WriteLine("You do not have sufficient funds, please enter more money");
                 return false;
             }
         }
 
-        public bool GetChange()
+        public string GetChange()
         {
-           
+
             const decimal Quarter = 0.25M;
             const decimal Dime = 0.10M;
             const decimal Nickel = 0.05M;
+            decimal startingBalance = Balance;
 
             decimal numQuarters = Balance / Quarter;
             decimal calculatingChange = Balance % Quarter;
@@ -58,14 +57,13 @@ namespace Capstone.Classes
 
             decimal numNickels = calculatingChange / Nickel;
 
-            Console.WriteLine($"Your change due is ${Balance}. Dispensing {numQuarters} Quarter(s), {numDimes} Dime(s), {numNickels} Nickel(s).");
             SalesLog.WriteLog("GIVE CHANGE:", Balance, 0.00M);
             Balance = 0;
-            return true;
+            return $"Your change due is {startingBalance:C2}. Dispensing {numQuarters} Quarter(s), {numDimes} Dime(s), and {numNickels} Nickel(s).";
         }
 
         //create our menu
-        public bool GetInventory()
+        public string GetInventory()
         {
             string output = "Key   Price   Type   Brand                Quantity\n";
             //loop through every line in our dictionary and print to the console
@@ -87,30 +85,29 @@ namespace Capstone.Classes
                 }
                 output += $"{item.Key,-6}${price,-7}{type,-7}{name,-20} {holdingCount}\n";
             }
-            Console.WriteLine(output);
-            return true;
+            return output;
         }
 
-        public bool SelectProduct(string key)
+        public Item SelectProduct(string key)
         {
-            //put in key y
-            //check if key is valid y
-            //if not return false y
-            //      check quantity if zero, return false y
-            //      check if have enough money y
-            //          dispense product y
-            //          subtract from quantity and subtract from balance y
-            //          print item name, cost, sound, balance remaining y
-            //          return true and add to Log 
+            //put in key 
+            //check if key is valid 
+            //if not return false 
+            //      check quantity if zero, return false 
+            //      check if have enough money 
+            //          dispense product 
+            //          subtract from quantity and subtract from balance 
+            //          print item name, cost, sound, balance remaining 
+            //          return true and add to Log
             //              return to purchase menu
             if (CheckKey(key) && CheckQuantity(key) && CheckMoney(key))
             {
-                Dispense(key);
-                return true;
+                Item choice = Dispense(key);
+                return choice;
             }
             else
             {
-                return false;
+                return null;
             }
         }
 
@@ -126,17 +123,25 @@ namespace Capstone.Classes
 
         public bool CheckMoney(string key)
         {
-            Item currentChoice = Inventory[key].Peek();
-            return Balance >= currentChoice.Price;
+            try
+            {
+                Item currentChoice = Inventory[key].Peek();
+                return Balance >= currentChoice.Price;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("You've entered an incorrect value. Please try again.");
+                return false;
+            }
+
         }
 
-        public bool Dispense(string key)
+        public Item Dispense(string key)
         {
             Item currentChoice = Inventory[key].Pop();
             SubtractMoney(currentChoice.Price);
-            Console.WriteLine($"Dispensing {currentChoice.Name}, for ${currentChoice.Price}.\n{currentChoice.Sound}\n");
             SalesLog.WriteLog($"{currentChoice.Name} {key}", currentChoice.Price, Balance);
-            return true;
+            return currentChoice;
         }
 
         //exit program
