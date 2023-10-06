@@ -9,6 +9,7 @@ namespace Capstone.Classes
 {
     public class FileFunction 
     {
+        private const int Stock = 5;
         public string FileName { get; set; }
         public FileFunction (string fileName)
         {
@@ -38,7 +39,7 @@ namespace Capstone.Classes
                         {
                             Item newItem = new Item(splitLine[1], splitLine[2], splitLine[3]);
                             Stack<Item> items = new Stack<Item>();
-                            for (int i = 0; i < 5; i++)
+                            for (int i = 0; i < Stock; i++)
                             {
                                 items.Push(newItem);
                             }
