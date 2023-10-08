@@ -10,10 +10,26 @@ namespace Capstone.Classes
     public class FileFunction 
     {
         private const int Stock = 5;
-        public string FileName { get; set; }
+        private string FileName { get;  }
         public FileFunction (string fileName)
         {
             FileName = fileName;
+        }
+        private bool ValidateFile()
+        {
+            return File.Exists(FileName);
+        }
+
+        public Dictionary<string, Stack<Item>>LoadUpFile()
+        {
+            if (ValidateFile())
+            {
+                return ExtractItem();
+            }
+            else
+            {
+                return null;
+            }
         }
         private Dictionary<string,Stack<Item>> ExtractItem()
         {
@@ -44,7 +60,7 @@ namespace Capstone.Classes
                                 items.Push(newItem);
                             }
                             //add this all to the dictionary
-                            output[splitLine[0]] = items;
+                            output[splitLine[0].ToUpper()] = items;
                         }
                         catch (Exception e)
                         {
@@ -65,22 +81,7 @@ namespace Capstone.Classes
 
         }
 
-        private bool ValidateFile()
-        {
-            return File.Exists(FileName);
-        }
-
-        public Dictionary<string, Stack<Item>>LoadUpFile()
-        {
-            if (ValidateFile())
-            {
-                return ExtractItem();
-            }
-            else
-            {
-                return null;
-            }
-        }
+        
 
     }
 }

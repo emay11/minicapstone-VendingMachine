@@ -14,7 +14,6 @@ namespace Capstone.Classes
             Console.WriteLine("Welcome to the Vendo-Matic 800 Vending Machine\n");
             //here we'll do the console writelines and readlines
             //Load our vending machine
-            vendoMatic.GetInventory();
             //load main menu
             //get a response
             //validate the response
@@ -43,7 +42,7 @@ namespace Capstone.Classes
                 menuOption = AskFor123("[1] Display vending machine items\n[2] Purchase\n[3] Exit\n\nPlease enter a menu option: ");
                 if (menuOption == "1")
                 {
-                    Console.WriteLine(vendoMatic.GetInventory()); 
+                    Console.WriteLine(vendoMatic.GetInventory());
                     menuOption = "-1";
                 }
                 else if (menuOption == "2")
@@ -71,7 +70,7 @@ namespace Capstone.Classes
                     int balanceToAdd = 0;
                     do
                     {
-                        balanceToAdd = AskForInteger("How much money would you like to add in whole dollars? ");
+                        balanceToAdd = AskForInteger("Please enter an amount in whole dollars, excluding decimals: ");
                     } while (balanceToAdd <= 0);
                     vendoMatic.AddMoney(balanceToAdd);
                     Console.WriteLine($"Your balance is now {vendoMatic.GetBalance():C2}");
@@ -79,25 +78,8 @@ namespace Capstone.Classes
                 }
                 else if (menuOption == "2")
                 {
-                    Console.WriteLine(vendoMatic.GetInventory() + "\n");
-                    Console.Write("Please enter the item's key: ");
-                    string key = Console.ReadLine().ToUpper();
-                    Item canDispense = null;
-                    do
-                    {
-                        if (vendoMatic.CheckMoney(key))
-                        {
-                            canDispense = vendoMatic.SelectProduct(key);
-                            Console.WriteLine($"Dispensing {canDispense.Name}, for {canDispense.Price:C2}.\n{canDispense.Sound}\n");
-                            Console.WriteLine($"Your balance is now {vendoMatic.GetBalance():C2}");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Sorry, insufficient funds. Please add more money.");
-                        }
-                    } while (canDispense == null);
+                    ProductSelection();
                     menuOption = "-1";
-
                 }
                 else if (menuOption == "3")
                 {
@@ -107,7 +89,44 @@ namespace Capstone.Classes
             return "";
         }
 
-        public string AskFor123(string message)
+        private string ProductSelection()
+        {
+            bool keepGoing = false;
+            do
+            {
+                Console.WriteLine(vendoMatic.GetInventory() + "\n");
+                Console.Write("Please enter the item's key: ");
+                string key = Console.ReadLine().Trim().ToUpper();
+                if (vendoMatic.CheckKey(key))
+                {
+                    if (vendoMatic.CheckQuantity(key))
+                    {
+                        if (vendoMatic.CheckMoney(key))
+                        {
+                            Item canDispense = vendoMatic.Dispense(key);
+                            Console.WriteLine($"Dispensing {canDispense.Name}, for {canDispense.Price:C2}.\n{canDispense.Sound}\n");
+                            Console.WriteLine($"Your balance is now {vendoMatic.GetBalance():C2}");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Sorry, your balance is insufficient. Returning to the previous menu where you can add more money.");
+
+                        }                        
+                    }
+                    else
+                    {
+                        Console.WriteLine("Sorry, the item you want is unavailable. Please try again. Returning to the previous menu.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Sorry, you entered an invalid key. Please try again. Returning to the previous menu.");
+                }
+            } while (keepGoing);
+            return "";
+        }
+
+        private string AskFor123(string message)
         {
             Console.Write(message);
             string number = Console.ReadLine();
@@ -122,7 +141,7 @@ namespace Capstone.Classes
 
         }
 
-        public int AskForInteger(string message)
+        private int AskForInteger(string message)
         {
             Console.Write(message);
             try

@@ -57,9 +57,9 @@ namespace Capstone.Classes
 
             decimal numNickels = calculatingChange / Nickel;
 
-            SalesLog.WriteLog("GIVE CHANGE:", Balance, 0.00M);
+            SalesLog.WriteLog("GIVE CHANGE:", startingBalance, 0.00M);
             Balance = 0;
-            return $"Your change due is {startingBalance:C2}. Dispensing {numQuarters} Quarter(s), {numDimes} Dime(s), and {numNickels} Nickel(s).";
+            return $"Your change due is {startingBalance:C2}. Dispensing {(int)(numQuarters)} Quarter(s), {numDimes} Dime(s), and {numNickels} Nickel(s).";
         }
 
         //create our menu
@@ -68,48 +68,24 @@ namespace Capstone.Classes
             string output = "Key   Price   Type   Brand                Quantity\n";
             //loop through every line in our dictionary and print to the console
             foreach (KeyValuePair<string, Stack<Item>> item in Inventory)
-            {
-                Item currentStack = item.Value.Peek();
-                string price = currentStack.Price.ToString();
-                string name = currentStack.Name;
-                string type = currentStack.Type;
-                int count = item.Value.Count;
-                string holdingCount = "";
-                if (count == 0)
+            { 
+                try
                 {
-                    holdingCount = "SOLD OUT";
+                    Item currentStack = item.Value.Peek();
+                    string price = currentStack.Price.ToString();
+                    string name = currentStack.Name;
+                    string type = currentStack.Type;
+                    int count = item.Value.Count;
+                    output += $"{item.Key,-6}${price,-8}{type,-7}{name,-20} {count.ToString()}\n";
                 }
-                else
+                catch (Exception e)
                 {
-                    holdingCount = count.ToString();
+                    output += $"{item.Key,-6}SOLD OUT\n";
                 }
-                output += $"{item.Key,-6}${price,-7}{type,-7}{name,-20} {holdingCount}\n";
             }
             return output;
         }
 
-        public Item SelectProduct(string key)
-        {
-            //put in key 
-            //check if key is valid 
-            //if not return false 
-            //      check quantity if zero, return false 
-            //      check if have enough money 
-            //          dispense product 
-            //          subtract from quantity and subtract from balance 
-            //          print item name, cost, sound, balance remaining 
-            //          return true and add to Log
-            //              return to purchase menu
-            if (CheckKey(key) && CheckQuantity(key) && CheckMoney(key))
-            {
-                Item choice = Dispense(key);
-                return choice;
-            }
-            else
-            {
-                return null;
-            }
-        }
 
         public bool CheckKey(string key)
         {
