@@ -7,6 +7,23 @@ using System.Text;
 
 namespace CapstoneTests
 {
+    /* testing strings
+       * test two+ happy paths
+       * test edge cases
+       * test null
+       * test blank ""
+       * test different CaSeS
+       * test chars
+       * test line breaks
+       * test stray blank spaces included
+       * test boundaries
+       * test zero
+       * test negative
+       * test random numbers (not too large unless needed)
+       * arrange
+       * act
+       * assert
+       */
     [TestClass]
     public class VendingMachineTests
     {
@@ -24,21 +41,21 @@ namespace CapstoneTests
             Assert.AreEqual(0.00M, actual);
         }
         [TestMethod] 
-        public void AddMoneyHappyPath()
+        public void AddMoneyHappyPath() //Ethan
         {
-            decimal input1 = 5.0M;
-            decimal input2 = 10.0M;
-            decimal expected2 = 15.0M;
+            string input1 = "5";
+            string input2 = "10";
+            string expected2 = "Your balance is now $15.00";
             
-            sut.AddMoney(input1);
-            sut.AddMoney(input2);
+            string actual1 = sut.AddMoney(input1);
+            string actual2 = sut.AddMoney(input2);
 
-            Assert.AreEqual(expected2, sut.GetBalance()); 
+            Assert.AreEqual(expected2, actual2); 
         }
         [TestMethod] 
-        public void SubtractMoneyHappyPathItemLessThanBalance()
+        public void SubtractMoneyHappyPathItemLessThanBalance() //Ethan
         {
-            sut.AddMoney(15M);
+            sut.AddMoney("15");
             decimal input1 = 5.0M; 
             bool expected1 = true;
 
@@ -47,9 +64,9 @@ namespace CapstoneTests
             Assert.AreEqual(expected1, actual1);
         }
         [TestMethod]
-        public void SubtractMoneyHappyPathItemMoreThanBalance()
+        public void SubtractMoneyHappyPathItemMoreThanBalance() //Ethan
         {
-            sut.AddMoney(15M);
+            sut.AddMoney("15");
             decimal input1 = 25.0M; 
             bool expected1 = false;
 
@@ -58,17 +75,17 @@ namespace CapstoneTests
             Assert.AreEqual(expected1, actual1);
         }
         [TestMethod] 
-        public void GetChangeHappyPath()
+        public void GetChangeHappyPath() //Aseel
         {
-            sut.AddMoney(0.65M);
-            string expected1 = "Your change due is $0.65. Dispensing 2 Quarter(s), 1 Dime(s), and 1 Nickel(s).";
+            sut.AddMoney("1");
+            string expected1 = "Your change due is $1.00. Dispensing 4 Quarter(s), 0 Dime(s), and 0 Nickel(s).";
 
             string actual1 = sut.GetChange();
             
             Assert.AreEqual(expected1, actual1);
         }
         [TestMethod]
-        public void GetInventoryHappyPath()
+        public void GetInventoryHappyPath() //Aseel
         { 
             string expected1 = "Key   Price    Type   Brand                Quantity\nT1    $0.95    Chip   TestSnack            5\nT2    $1.95    Drink  TestBeverage         5\n";
 
@@ -77,7 +94,7 @@ namespace CapstoneTests
             Assert.AreEqual(expected1, actual1);
         }
         [TestMethod]
-        public void CheckKeyHappyPath()
+        public void CheckKeyHappyPath() //Aseel
         {
             string input1 = "T1";
             bool expected1 = true;
@@ -91,7 +108,7 @@ namespace CapstoneTests
             Assert.AreEqual(expected2, actual2);
         }
         [TestMethod]
-        public void CheckQuantityHappyPath()
+        public void CheckQuantityHappyPath() //Aseel
         {
             string input1 = "T1";
             bool expected1 = true;
@@ -105,9 +122,9 @@ namespace CapstoneTests
             Assert.AreEqual(expected2, actual2);
         }
         [TestMethod]
-        public void CheckMoneyHappyPath()
+        public void CheckMoneyHappyPath() //Ethan
         {
-            sut.AddMoney(1M);
+            sut.AddMoney("1");
             string input1 = "T1";
             bool expected1 = true;
             string input2 = "T2";
@@ -122,15 +139,35 @@ namespace CapstoneTests
         [TestMethod]
         //TODO check this test method makes sense
         // don't think it should be equals
-        public void DispenseHappyPath()
+        public void DispenseHappyPath() //Ethan
         {
-            sut.AddMoney(10M);
+            sut.AddMoney("10");
             string input1 = "T1";
             Item expected1 = new Item("TestSnack", "0.95", "Chip"); 
 
             Item actual1 = sut.Dispense(input1);
 
             CollectionAssert.Equals(expected1, actual1);
+        }
+
+        [TestMethod]
+
+        public void SelectProductHappyPath() //Aseel
+        {
+            sut.AddMoney("10");
+            string input1 = "T1";
+            string input2 = "T2";
+            string expected1 = "Dispensing TestSnack, for $0.95.\nCrunch Crunch, Yum!\n" +
+                            "Your balance is now $9.05";
+            string expected2 = "Dispensing TestBeverage, for $1.95.\nGlug Glug, Yum!\n" +
+                            "Your balance is now $7.10";
+
+            string actual1 = sut.SelectProduct(input1);
+            string actual2 = sut.SelectProduct(input2);
+
+
+            Assert.AreEqual(expected1, actual1);
+            Assert.AreEqual(expected2, actual2);
         }
     }
 }
