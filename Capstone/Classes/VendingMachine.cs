@@ -22,11 +22,26 @@ namespace Capstone.Classes
             return Balance;
         }
 
-        public decimal AddMoney(decimal value)
+        public string AddMoney(string value)
         {
-            Balance += value;
-            SalesLog.WriteLog("FEED MONEY:", value, Balance);
-            return Balance;
+            try
+            {
+                int moneyToAdd = int.Parse(value.Trim());
+                if(moneyToAdd >= 0)
+                {
+                    Balance += moneyToAdd;
+                    SalesLog.WriteLog("FEED MONEY:", moneyToAdd, Balance);
+                    return $"Your balance is now {Balance:C2}";
+                }
+                else
+                {
+                    return "Please enter a value above zero. Please try again.";
+                }
+            }
+            catch (Exception)
+            {
+                return "You've entered an incorrect value. Please try again.";
+            }
         }
 
         public bool SubtractMoney(decimal value)
