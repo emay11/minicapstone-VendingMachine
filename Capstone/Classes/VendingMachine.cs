@@ -1,6 +1,7 @@
 ﻿using Capstone.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 
@@ -26,8 +27,12 @@ namespace Capstone.Classes
         {
             try
             {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new BadStringException();
+                }
                 int moneyToAdd = int.Parse(value.Trim());
-                if(moneyToAdd >= 0)
+                if (moneyToAdd > 0)
                 {
                     Balance += moneyToAdd;
                     SalesLog.WriteLog("FEED MONEY:", moneyToAdd, Balance);
@@ -37,6 +42,10 @@ namespace Capstone.Classes
                 {
                     return "Please enter a value above zero. Please try again.";
                 }
+            }
+            catch (BadStringException bse)
+            {
+                return bse.Message;
             }
             catch (Exception)
             {
@@ -151,6 +160,46 @@ namespace Capstone.Classes
                 return null;
             }
 
+        }
+
+        public string SelectProduct(string key)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(key))
+                {
+                    throw new BadStringException();
+                }
+                string upperTrimmedKey = key.Trim().ToUpper();
+                if (CheckKey(upperTrimmedKey))
+                {
+                    if (CheckQuantity(upperTrimmedKey))
+                    {
+                        if (CheckMoney(upperTrimmedKey))
+                        {
+                            Item canDispense = Dispense(upperTrimmedKey);
+                            return $"Dispensing {canDispense.Name}, for {canDispense.Price:C2}.\n{canDispense.Sound}\n" +
+                            $"Your balance is now {GetBalance():C2}";
+                        }
+                        else
+                        {
+                            return "Sorry, your balance is insufficient. Returning to the previous menu where you can add more money.";
+                        }
+                    }
+                    else
+                    {
+                        return "Sorry, the item you want is unavailable. Please try again. Returning to the previous menu.";
+                    }
+                }
+                else
+                {
+                    return "Sorry, you entered an invalid key. Please try again. Returning to the previous menu.";
+                }
+            }
+            catch (BadStringException bse)
+            {
+                return bse.Message;
+            }
         }
 
         //exit program

@@ -38,7 +38,7 @@ namespace Capstone.Classes
         //the menus have the same basic structure so it should be possible to refactor them out
         //although I am not sure how to handle the exit function, since it is different to the purchase sub menu's option of console.write
         //private string Menu(string message, Func<string> menuOptionOne, Func<string> menuOptionTwo, Func<string> menuOptionThree) { }
-        
+
 
         private string MainMenu()
         {
@@ -77,14 +77,16 @@ namespace Capstone.Classes
                 menuOption = AskFor123($"\nCurrent balance available: {vendoMatic.GetBalance():C2}\n\n[1] Feed money\n[2] Select product\n[3] Finish transaction\n\nPlease enter a menu option: ");
                 if (menuOption == "1")
                 {
-                    string balanceToAdd = AskForInteger("\nPlease enter an amount in whole dollars, excluding decimals: ");                     
-                    
+                    string balanceToAdd = AskForString("\nPlease enter an amount in whole dollars, excluding decimals: ");
+
                     Console.WriteLine(vendoMatic.AddMoney(balanceToAdd));
                     menuOption = "-1";
                 }
                 else if (menuOption == "2")
                 {
-                    ProductSelection();
+                    Console.WriteLine(vendoMatic.GetInventory() + "\n");
+                    string key = AskForString("Please enter the item's key: ");
+                    Console.WriteLine(vendoMatic.SelectProduct(key));
                     menuOption = "-1";
                 }
                 else if (menuOption == "3")
@@ -100,43 +102,6 @@ namespace Capstone.Classes
             return "";
         }
 
-        private string ProductSelection()
-        {
-            bool keepGoing = false;
-            do
-            {
-                Console.WriteLine(vendoMatic.GetInventory() + "\n");
-                Console.Write("Please enter the item's key: ");
-
-                string key = Console.ReadLine().Trim().ToUpper();
-
-                if (vendoMatic.CheckKey(key))
-                {
-                    if (vendoMatic.CheckQuantity(key))
-                    {
-                        if (vendoMatic.CheckMoney(key))
-                        {
-                            Item canDispense = vendoMatic.Dispense(key);
-                            Console.WriteLine($"Dispensing {canDispense.Name}, for {canDispense.Price:C2}.\n{canDispense.Sound}\n");
-                            Console.WriteLine($"Your balance is now {vendoMatic.GetBalance():C2}");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Sorry, your balance is insufficient. Returning to the previous menu where you can add more money.");
-                        }                        
-                    }
-                    else
-                    {
-                        Console.WriteLine("Sorry, the item you want is unavailable. Please try again. Returning to the previous menu.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Sorry, you entered an invalid key. Please try again. Returning to the previous menu.");
-                }
-            } while (keepGoing);
-            return "";
-        }
 
         private string AskFor123(string message)
         {
@@ -153,7 +118,7 @@ namespace Capstone.Classes
 
         }
 
-        private string AskForInteger(string message)
+        private string AskForString(string message)
         {
             Console.Write(message);
             return Console.ReadLine();
