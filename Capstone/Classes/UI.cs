@@ -77,13 +77,9 @@ namespace Capstone.Classes
                 menuOption = AskFor123($"\nCurrent balance available: {vendoMatic.GetBalance():C2}\n\n[1] Feed money\n[2] Select product\n[3] Finish transaction\n\nPlease enter a menu option: ");
                 if (menuOption == "1")
                 {
-                    int balanceToAdd = 0;
-                    while (balanceToAdd <= 0) 
-                    {
-                        balanceToAdd = AskForInteger("\nPlease enter an amount in whole dollars, excluding decimals: ");                     
-                    }
-                    vendoMatic.AddMoney(balanceToAdd);
-                    Console.WriteLine($"Your balance is now {vendoMatic.GetBalance():C2}");
+                    string balanceToAdd = AskForInteger("\nPlease enter an amount in whole dollars, excluding decimals: ");                     
+                    
+                    Console.WriteLine(vendoMatic.AddMoney(balanceToAdd));
                     menuOption = "-1";
                 }
                 else if (menuOption == "2")
@@ -157,24 +153,10 @@ namespace Capstone.Classes
 
         }
 
-        private int AskForInteger(string message)
+        private string AskForInteger(string message)
         {
             Console.Write(message);
-            try
-            {
-                int moneyToAdd = int.Parse(Console.ReadLine().Trim());
-                if ( moneyToAdd<= 0)
-                {
-                    Console.WriteLine("Please enter a value above zero.");
-                    return -1;
-                }
-                return moneyToAdd;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("You entered an incorrect value. Please try again.");
-                return -1;
-            }
+            return Console.ReadLine();
 
         }
 
