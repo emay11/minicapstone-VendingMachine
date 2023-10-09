@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Capstone.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -59,16 +60,15 @@ namespace Capstone.Classes
 
             SalesLog.WriteLog("GIVE CHANGE:", startingBalance, 0.00M);
             Balance = 0;
-            return $"Your change due is {startingBalance:C2}. Dispensing {(int)(numQuarters)} Quarter(s), {numDimes} Dime(s), and {numNickels} Nickel(s).";
+            return $"Your change due is {startingBalance:C2}. Dispensing {(int)(numQuarters)} Quarter(s), {(int)(numDimes)} Dime(s), and {numNickels} Nickel(s).";
         }
 
-        //create our menu
         public string GetInventory()
         {
-            string output = "Key   Price   Type   Brand                Quantity\n";
+            string output = "Key   Price    Type   Brand                Quantity\n";
             //loop through every line in our dictionary and print to the console
             foreach (KeyValuePair<string, Stack<Item>> item in Inventory)
-            { 
+            {
                 try
                 {
                     Item currentStack = item.Value.Peek();
@@ -94,7 +94,14 @@ namespace Capstone.Classes
 
         public bool CheckQuantity(string key)
         {
-            return Inventory[key].Count > 0;
+            try
+            {
+                return Inventory[key].Count > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public bool CheckMoney(string key)
@@ -106,7 +113,6 @@ namespace Capstone.Classes
             }
             catch (Exception e)
             {
-                Console.WriteLine("You've entered an incorrect value. Please try again.");
                 return false;
             }
 
@@ -114,10 +120,22 @@ namespace Capstone.Classes
 
         public Item Dispense(string key)
         {
-            Item currentChoice = Inventory[key].Pop();
-            SubtractMoney(currentChoice.Price);
-            SalesLog.WriteLog($"{currentChoice.Name} {key}", currentChoice.Price, Balance);
-            return currentChoice;
+            try
+            {
+                Item currentChoice = Inventory[key].Pop();
+                SubtractMoney(currentChoice.Price);
+                SalesLog.WriteLog($"{currentChoice.Name} {key}", currentChoice.Price, Balance);
+                return currentChoice;
+            }
+            catch (SoldOutException soe)
+            {
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
         }
 
         //exit program

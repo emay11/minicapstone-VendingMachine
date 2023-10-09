@@ -31,8 +31,14 @@ namespace Capstone.Classes
             //dispense product break loop
             //if [3] dispense change
             //break loop to main menu
+
             MainMenu();
         }
+        //AT: I looked this up online but I am not sure if i can get it to work
+        //the menus have the same basic structure so it should be possible to refactor them out
+        //although I am not sure how to handle the exit function, since it is different to the purchase sub menu's option of console.write
+        //private string Menu(string message, Func<string> menuOptionOne, Func<string> menuOptionTwo, Func<string> menuOptionThree) { }
+        
 
         private string MainMenu()
         {
@@ -74,7 +80,7 @@ namespace Capstone.Classes
                     int balanceToAdd = 0;
                     while (balanceToAdd <= 0) 
                     {
-                        balanceToAdd = AskForInteger("Please enter an amount in whole dollars, excluding decimals: ");                     
+                        balanceToAdd = AskForInteger("\nPlease enter an amount in whole dollars, excluding decimals: ");                     
                     }
                     vendoMatic.AddMoney(balanceToAdd);
                     Console.WriteLine($"Your balance is now {vendoMatic.GetBalance():C2}");
@@ -121,7 +127,6 @@ namespace Capstone.Classes
                         else
                         {
                             Console.WriteLine("Sorry, your balance is insufficient. Returning to the previous menu where you can add more money.");
-
                         }                        
                     }
                     else
@@ -140,7 +145,7 @@ namespace Capstone.Classes
         private string AskFor123(string message)
         {
             Console.Write(message);
-            string number = Console.ReadLine();
+            string number = Console.ReadLine().Trim();
             if (number == "1" || number == "2" || number == "3")
             {
                 return number;
@@ -157,7 +162,7 @@ namespace Capstone.Classes
             Console.Write(message);
             try
             {
-                int moneyToAdd = int.Parse(Console.ReadLine());
+                int moneyToAdd = int.Parse(Console.ReadLine().Trim());
                 if ( moneyToAdd<= 0)
                 {
                     Console.WriteLine("Please enter a value above zero.");

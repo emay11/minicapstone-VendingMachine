@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Capstone.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection.Metadata.Ecma335;
@@ -49,10 +50,14 @@ namespace Capstone.Classes
                     while (!sr.EndOfStream)
                     {
                         string line = sr.ReadLine();
-                        string[] splitLine = line.Split("|");
                         
                         try
                         {
+                            if (string.IsNullOrEmpty(line))
+                            {
+                                throw new InvalidFileException();
+                            }
+                            string[] splitLine = line.Split("|");
                             Item newItem = new Item(splitLine[1], splitLine[2], splitLine[3]);
                             Stack<Item> items = new Stack<Item>();
                             for (int i = 0; i < Stock; i++)
@@ -64,18 +69,14 @@ namespace Capstone.Classes
                         }
                         catch (Exception e)
                         {
-
-                            //TODO create error log
-                            //problem creating object
+                             
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                //TODO create error log
-                //file did'nt load
-                
+                 
             }
             return output;
 
