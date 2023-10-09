@@ -31,7 +31,7 @@ namespace CapstoneTests
         [TestInitialize]
         public void init()
         {
-            VendingMachine sut = new VendingMachine("Test File.csv");             
+            VendingMachine sut = new VendingMachine("Test File.csv");
         }
 
         [TestMethod]
@@ -40,26 +40,26 @@ namespace CapstoneTests
             decimal actual = sut.GetBalance();
             Assert.AreEqual(0.00M, actual);
         }
-        [TestMethod] 
+        [TestMethod]
         public void AddMoneyHappyPath() //Ethan
         {
             string input1 = "5";
             string input2 = "10";
             string expected2 = "Your balance is now $15.00";
-            
+
             string actual1 = sut.AddMoney(input1);
             string actual2 = sut.AddMoney(input2);
 
-            Assert.AreEqual(expected2, actual2); 
+            Assert.AreEqual(expected2, actual2);
         }
-        [TestMethod] 
+        [TestMethod]
         public void SubtractMoneyHappyPathItemLessThanBalance() //Ethan
         {
             sut.AddMoney("15");
-            decimal input1 = 5.0M; 
+            decimal input1 = 5.0M;
             bool expected1 = true;
 
-            bool actual1 = sut.SubtractMoney(input1); 
+            bool actual1 = sut.SubtractMoney(input1);
 
             Assert.AreEqual(expected1, actual1);
         }
@@ -67,26 +67,31 @@ namespace CapstoneTests
         public void SubtractMoneyHappyPathItemMoreThanBalance() //Ethan
         {
             sut.AddMoney("15");
-            decimal input1 = 25.0M; 
+            decimal input1 = 25.0M;
             bool expected1 = false;
 
-            bool actual1 = sut.SubtractMoney(input1); 
+            bool actual1 = sut.SubtractMoney(input1);
 
             Assert.AreEqual(expected1, actual1);
         }
-        [TestMethod] 
+        // this doesn't really call any parameters except the balance
+        // balance is only a decimal and the values subtracted from it are divisible by 5
+        // can't generate another test aside from happy path
+        [TestMethod]
         public void GetChangeHappyPath() //Aseel
         {
             sut.AddMoney("1");
             string expected1 = "Your change due is $1.00. Dispensing 4 Quarter(s), 0 Dime(s), and 0 Nickel(s).";
 
             string actual1 = sut.GetChange();
-            
+
             Assert.AreEqual(expected1, actual1);
         }
+        // this doesn't really call any parameters except the file
+        // can't generate another test aside from happy path
         [TestMethod]
         public void GetInventoryHappyPath() //Aseel
-        { 
+        {
             string expected1 = "Key   Price    Type   Brand                Quantity\nT1    $0.95    Chip   TestSnack            5\nT2    $1.95    Drink  TestBeverage         5\n";
 
             string actual1 = sut.GetInventory();
@@ -108,6 +113,24 @@ namespace CapstoneTests
             Assert.AreEqual(expected2, actual2);
         }
         [TestMethod]
+        public void CheckKeyIsNullOrEmpty() //Aseel
+        {
+            string input1 = "";
+            bool expected1 = false;
+            string input2 = null;
+            bool expected2 = false;
+            string input3 = " ";
+            bool expected3 = false;
+
+            bool actual1 = sut.CheckKey(input1);
+            bool actual2 = sut.CheckKey(input2);
+            bool actual3 = sut.CheckKey(input3);
+
+            Assert.AreEqual(expected1, actual1);
+            Assert.AreEqual(expected2, actual2);
+            Assert.AreEqual(expected3, actual3);
+        }
+        [TestMethod]
         public void CheckQuantityHappyPath() //Aseel
         {
             string input1 = "T1";
@@ -120,6 +143,24 @@ namespace CapstoneTests
 
             Assert.AreEqual(expected1, actual1);
             Assert.AreEqual(expected2, actual2);
+        }
+        [TestMethod]
+        public void CheckQuantityIsNullOrEmpty() //Aseel
+        {
+            string input1 = "";
+            bool expected1 = false;
+            string input2 = null;
+            bool expected2 = false;
+            string input3 = " ";
+            bool expected3 = false;
+
+            bool actual1 = sut.CheckQuantity(input1);
+            bool actual2 = sut.CheckQuantity(input2);
+            bool actual3 = sut.CheckQuantity(input3);
+
+            Assert.AreEqual(expected1, actual1);
+            Assert.AreEqual(expected2, actual2);
+            Assert.AreEqual(expected3, actual3);
         }
         [TestMethod]
         public void CheckMoneyHappyPath() //Ethan
@@ -143,7 +184,7 @@ namespace CapstoneTests
         {
             sut.AddMoney("10");
             string input1 = "T1";
-            Item expected1 = new Item("TestSnack", "0.95", "Chip"); 
+            Item expected1 = new Item("TestSnack", "0.95", "Chip");
 
             Item actual1 = sut.Dispense(input1);
 
@@ -151,7 +192,6 @@ namespace CapstoneTests
         }
 
         [TestMethod]
-
         public void SelectProductHappyPath() //Aseel
         {
             sut.AddMoney("10");
@@ -165,9 +205,47 @@ namespace CapstoneTests
             string actual1 = sut.SelectProduct(input1);
             string actual2 = sut.SelectProduct(input2);
 
+            Assert.AreEqual(expected1, actual1);
+            Assert.AreEqual(expected2, actual2);
+        }
+        [TestMethod]
+        public void SelectProductIsNullOrEmpty() //Aseel
+        {
+            sut.AddMoney("10");
+            string input1 = "";
+            string input2 = null;
+            string expected1 = "An invalid input was passed.";
+            string expected2 = "An invalid input was passed.";
+
+            string actual1 = sut.SelectProduct(input1);
+            string actual2 = sut.SelectProduct(input2);
 
             Assert.AreEqual(expected1, actual1);
             Assert.AreEqual(expected2, actual2);
+        }
+        [TestMethod]
+        public void SelectProductCase() //Aseel
+        {
+            sut.AddMoney("10");
+            string input1 = "t1";
+            string expected1 = "Dispensing TestSnack, for $0.95.\nCrunch Crunch, Yum!\n" +
+                            "Your balance is now $9.05"; 
+
+            string actual1 = sut.SelectProduct(input1); 
+
+            Assert.AreEqual(expected1, actual1); 
+        }
+        [TestMethod]
+        public void SelectProductTrim() //Aseel
+        {
+            sut.AddMoney("10");
+            string input1 = "t1 ";
+            string expected1 = "Dispensing TestSnack, for $0.95.\nCrunch Crunch, Yum!\n" +
+                            "Your balance is now $9.05"; 
+
+            string actual1 = sut.SelectProduct(input1);
+
+            Assert.AreEqual(expected1, actual1);
         }
     }
 }

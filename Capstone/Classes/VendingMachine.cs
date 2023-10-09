@@ -113,7 +113,14 @@ namespace Capstone.Classes
 
         public bool CheckKey(string key)
         {
-            return Inventory.ContainsKey(key);
+            try
+            {
+                return Inventory.ContainsKey(key);
+            }
+            catch (Exception)
+            {
+                return false;
+            }            
         }
 
         public bool CheckQuantity(string key)
