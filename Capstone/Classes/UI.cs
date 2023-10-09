@@ -11,7 +11,7 @@ namespace Capstone.Classes
         VendingMachine vendoMatic = new VendingMachine(InventoryLoad);
         public void Run()
         {
-            Console.WriteLine("Welcome to the Vendo-Matic 800 Vending Machine\n");
+            Console.WriteLine("Welcome to the Vendo-Matic 800 Vending Machine");
             //here we'll do the console writelines and readlines
             //Load our vending machine
             //load main menu
@@ -39,7 +39,7 @@ namespace Capstone.Classes
             string menuOption = "-1";
             do
             {
-                menuOption = AskFor123("[1] Display vending machine items\n[2] Purchase\n[3] Exit\n\nPlease enter a menu option: ");
+                menuOption = AskFor123("\n[1] Display vending machine items\n[2] Purchase\n[3] Exit\n\nPlease enter a menu option: ");
                 if (menuOption == "1")
                 {
                     Console.WriteLine(vendoMatic.GetInventory());
@@ -54,6 +54,10 @@ namespace Capstone.Classes
                 {
                     vendoMatic.Exit();
                 }
+                else
+                {
+                    Console.WriteLine("Please enter either 1, 2, or 3.");
+                }
 
             } while (menuOption == "-1");
             return "";
@@ -64,14 +68,14 @@ namespace Capstone.Classes
             string menuOption = "-1";
             do
             {
-                menuOption = AskFor123($"Current money provided: {vendoMatic.GetBalance():C2}\n\n[1] Feed money\n[2] Select product\n[3] Finish transaction\n\nPlease enter a menu option: ");
+                menuOption = AskFor123($"\nCurrent balance available: {vendoMatic.GetBalance():C2}\n\n[1] Feed money\n[2] Select product\n[3] Finish transaction\n\nPlease enter a menu option: ");
                 if (menuOption == "1")
                 {
                     int balanceToAdd = 0;
-                    do
+                    while (balanceToAdd <= 0) 
                     {
-                        balanceToAdd = AskForInteger("Please enter an amount in whole dollars, excluding decimals: ");
-                    } while (balanceToAdd <= 0);
+                        balanceToAdd = AskForInteger("Please enter an amount in whole dollars, excluding decimals: ");                     
+                    }
                     vendoMatic.AddMoney(balanceToAdd);
                     Console.WriteLine($"Your balance is now {vendoMatic.GetBalance():C2}");
                     menuOption = "-1";
@@ -85,7 +89,12 @@ namespace Capstone.Classes
                 {
                     Console.WriteLine(vendoMatic.GetChange());
                 }
+                else
+                {
+                    Console.WriteLine("Please enter either 1, 2, or 3.");
+                }
             } while (menuOption == "-1");
+
             return "";
         }
 
@@ -96,7 +105,9 @@ namespace Capstone.Classes
             {
                 Console.WriteLine(vendoMatic.GetInventory() + "\n");
                 Console.Write("Please enter the item's key: ");
+
                 string key = Console.ReadLine().Trim().ToUpper();
+
                 if (vendoMatic.CheckKey(key))
                 {
                     if (vendoMatic.CheckQuantity(key))
@@ -146,7 +157,13 @@ namespace Capstone.Classes
             Console.Write(message);
             try
             {
-                return int.Parse(Console.ReadLine());
+                int moneyToAdd = int.Parse(Console.ReadLine());
+                if ( moneyToAdd<= 0)
+                {
+                    Console.WriteLine("Please enter a value above zero.");
+                    return -1;
+                }
+                return moneyToAdd;
             }
             catch (Exception e)
             {
