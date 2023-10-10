@@ -20,7 +20,6 @@ namespace Capstone.Classes
 			catch (Exception e)
 			{
 
-                //TODO add error log file
             }
         }
     }

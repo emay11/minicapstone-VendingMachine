@@ -58,6 +58,7 @@ namespace Capstone.Classes
                 }
                 else if (menuOption == "3")
                 {
+                    Console.WriteLine("\nThank you for using the Vendo-Matic 800 Vending Machine");
                     vendoMatic.Exit();
                 }
                 else
