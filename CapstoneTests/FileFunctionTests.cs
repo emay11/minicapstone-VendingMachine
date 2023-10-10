@@ -95,5 +95,28 @@ namespace CapstoneTests
 
             Assert.AreEqual(expected, actual);
         }
+        [TestMethod]
+        public void LoadUpFileJunkyData()
+        {
+            // has bad key
+            // has too few elements
+            // has too many elements
+            // doesn't have decimals
+            // has negative decimals
+            // has incorrect type
+            FileFunction sut = new FileFunction("Junky Test File.csv");
+            Dictionary<string, Stack<Item>> expected = new Dictionary<string, Stack<Item>>();
+
+            Dictionary<string, Stack<Item>> actual = sut.LoadUpFile();
+
+            int expectedKeyCount = 2;
+            int actualKeyCount = 0;
+            
+            foreach(KeyValuePair<string, Stack<Item>> key in actual)
+            {
+                actualKeyCount++;
+            }
+            Assert.AreEqual(expectedKeyCount, actualKeyCount);
+        }
     }
 }

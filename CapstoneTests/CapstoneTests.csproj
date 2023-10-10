@@ -17,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Junky Test File.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Test File.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

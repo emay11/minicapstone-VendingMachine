@@ -156,10 +156,14 @@ namespace Capstone.Classes
         {
             try
             {
-                Item currentChoice = Inventory[key].Pop();
-                SubtractMoney(currentChoice.Price);
-                SalesLog.WriteLog($"{currentChoice.Name} {key}", currentChoice.Price, Balance);
-                return currentChoice;
+                if (!string.IsNullOrEmpty(key) && CheckKey(key) && CheckQuantity(key) && CheckMoney(key))
+                {
+                    Item currentChoice = Inventory[key].Pop();
+                    SubtractMoney(currentChoice.Price);
+
+                    SalesLog.WriteLog($"{currentChoice.Name} {key}", currentChoice.Price, Balance);
+                    return currentChoice;
+                }
             }
             catch (SoldOutException soe)
             {
@@ -169,7 +173,7 @@ namespace Capstone.Classes
             {
                 return null;
             }
-
+            return null;
         }
 
         public string SelectProduct(string key)

@@ -262,10 +262,18 @@ namespace CapstoneTests
             sut.AddMoney("10");
             string input1 = "T1";
             Item expected1 = new Item("TestSnack", "0.95", "Chip");
+            string expected1Name = "TestSnack";
+            decimal expected1Price = 0.95M;
+            string expected1Type = "Chip";
 
             Item actual1 = sut.Dispense(input1);
+            string actual1Name = actual1.Name;
+            decimal actual1Price = actual1.Price;
+            string actual1Type = actual1.Type;
 
-            CollectionAssert.Equals(expected1, actual1);
+            Assert.AreEqual(expected1Name, actual1Name);
+            Assert.AreEqual(expected1Price, actual1Price);
+            Assert.AreEqual(expected1Type, actual1Type);
         }
         [TestMethod]
         public void DispenseZeroStock()
@@ -281,7 +289,7 @@ namespace CapstoneTests
 
             Item actual1 = sut.Dispense(input1);
 
-            CollectionAssert.Equals(expected1, actual1);
+            Assert.AreEqual(expected1, actual1);
         }
         [TestMethod]
         public void DispenseNotEnoughMoney()
@@ -293,7 +301,7 @@ namespace CapstoneTests
 
             Item actual1 = sut.Dispense(input1);
 
-            CollectionAssert.Equals(expected1, actual1);
+            Assert.AreEqual(expected1, actual1);
         }
         [TestMethod]
         public void DispenseBadKey()
@@ -305,7 +313,7 @@ namespace CapstoneTests
 
             Item actual1 = sut.Dispense(input1);
 
-            CollectionAssert.Equals(expected1, actual1);
+            Assert.AreEqual(expected1, actual1);
         }
 
         [TestMethod]

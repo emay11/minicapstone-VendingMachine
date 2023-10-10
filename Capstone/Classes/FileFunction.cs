@@ -59,7 +59,7 @@ namespace Capstone.Classes
 
                         try
                         {
-                            if (string.IsNullOrEmpty(line))
+                            if (string.IsNullOrEmpty(line) || LineSplitter(line) == null)
                             {
                                 throw new InvalidFileException();
                             }
@@ -96,7 +96,7 @@ namespace Capstone.Classes
             {
                 return line.Split("|");
             }
-            return null;            
+            return null;
         }
         private bool PipeCounter(string line)
         {
@@ -106,7 +106,7 @@ namespace Capstone.Classes
             for (int i = 0; i < line.Length; i++)
             {
                 string character = line.Substring(i, 1);
-                if (character == "|")
+                if (character.Contains("|"))
                 {
                     pipeCounter++;
                 }
@@ -149,15 +149,18 @@ namespace Capstone.Classes
             {
                 // make sure the second value can be converted to a decimal
                 // if it can't, it'll throw an error
-                decimal firstPositionAsDec = decimal.Parse(splitLine[1]);
-
-                // if that is all valid
-                return true;
+                decimal firstPositionAsDec = decimal.Parse(splitLine[2]);
+                if (firstPositionAsDec > 0)
+                {
+                    // if that is all valid
+                    return true;
+                }
             }
             catch (BadStringException)
             {
                 return false;
             }
+            return false;
         }
         private bool ThirdPositionValidation(string line)
         {

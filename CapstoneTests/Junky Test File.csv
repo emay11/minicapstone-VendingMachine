@@ -1,0 +1,10 @@
+T1|TestSnack|0.95|Chip
+T2|TestBeverage|1.95|Drink
+
+T123|TestSnack|0.00|Chip
+TA|TestSnack|-1.00|Chip
+T4|JunkSnack|Chip
+T5|JunkSnack|5.00|Chip|ExtraParamater
+T6|JunkSnack|five|Chip
+T7|JunkSnack|-5.00|Chip
+T8|JunkSnack|5.00|Coke
