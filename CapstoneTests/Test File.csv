@@ -1,2 +1,4 @@
 T1|TestSnack|0.95|Chip
 T2|TestBeverage|1.95|Drink
+T3|TestSnack|0.00|Chip
+T4|TestSnack|-1.00|Chip

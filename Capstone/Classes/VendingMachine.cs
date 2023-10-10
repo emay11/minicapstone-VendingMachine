@@ -55,15 +55,15 @@ namespace Capstone.Classes
 
         public bool SubtractMoney(decimal value)
         {
-            if (Balance >= value)
+            if ((Balance > 0) && (value > 0))
             {
-                Balance -= value;
-                return true;
+                if (Balance >= value)
+                {
+                    Balance -= value;
+                    return true;
+                }
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public string GetChange()
@@ -120,7 +120,7 @@ namespace Capstone.Classes
             catch (Exception)
             {
                 return false;
-            }            
+            }
         }
 
         public bool CheckQuantity(string key)
@@ -140,13 +140,16 @@ namespace Capstone.Classes
             try
             {
                 Item currentChoice = Inventory[key].Peek();
-                return Balance >= currentChoice.Price;
+                if (currentChoice.Price > 0 && Balance >= currentChoice.Price)
+                {
+                    return true;
+                }
             }
             catch (Exception e)
             {
                 return false;
             }
-
+            return false;
         }
 
         public Item Dispense(string key)
