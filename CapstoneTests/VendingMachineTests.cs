@@ -140,7 +140,7 @@ namespace CapstoneTests
         // balance is only a decimal and the values subtracted from it are divisible by 5
         // can't generate another test aside from happy path
         [TestMethod]
-        public void GetChangeHappyPath() //Aseel
+        public void GetChangeHappyPath() 
         {
             sut.AddMoney("1");
             string expected1 = "Your change due is $1.00. Dispensing 4 Quarter(s), 0 Dime(s), and 0 Nickel(s).";
@@ -152,7 +152,7 @@ namespace CapstoneTests
         // this doesn't really call any parameters except the file
         // can't generate another test aside from happy path
         [TestMethod]
-        public void GetInventoryHappyPath() //Aseel
+        public void GetInventoryHappyPath() 
         {
             string expected1 = "Key   Price    Type   Brand                Quantity\nT1    $0.95    Chip   TestSnack            5\nT2    $1.95    Drink  TestBeverage         5\n";
 
@@ -161,7 +161,7 @@ namespace CapstoneTests
             Assert.AreEqual(expected1, actual1);
         }
         [TestMethod]
-        public void CheckKeyHappyPath() //Aseel
+        public void CheckKeyHappyPath() 
         {
             string input1 = "T1";
             bool expected1 = true;
@@ -175,7 +175,7 @@ namespace CapstoneTests
             Assert.AreEqual(expected2, actual2);
         }
         [TestMethod]
-        public void CheckKeyIsNullOrEmpty() //Aseel
+        public void CheckKeyIsNullOrEmpty() 
         {
             string input1 = "";
             bool expected1 = false;
@@ -193,7 +193,7 @@ namespace CapstoneTests
             Assert.AreEqual(expected3, actual3);
         }
         [TestMethod]
-        public void CheckQuantityHappyPath() //Aseel
+        public void CheckQuantityHappyPath() 
         {
             string input1 = "T1";
             bool expected1 = true;
@@ -207,7 +207,7 @@ namespace CapstoneTests
             Assert.AreEqual(expected2, actual2);
         }
         [TestMethod]
-        public void CheckQuantityIsNullOrEmpty() //Aseel
+        public void CheckQuantityIsNullOrEmpty() 
         {
             string input1 = "";
             bool expected1 = false;
@@ -255,8 +255,7 @@ namespace CapstoneTests
             Assert.AreEqual(expected2, actual2);
         }
         [TestMethod]
-        //TODO check this test method makes sense
-        // don't think it should be equals
+       
         public void DispenseHappyPath()
         {
             sut.AddMoney("10");
@@ -317,7 +316,7 @@ namespace CapstoneTests
         }
 
         [TestMethod]
-        public void SelectProductHappyPath() //Aseel
+        public void SelectProductHappyPath() 
         {
             sut.AddMoney("10");
             string input1 = "T1";
@@ -334,7 +333,7 @@ namespace CapstoneTests
             Assert.AreEqual(expected2, actual2);
         }
         [TestMethod]
-        public void SelectProductIsNullOrEmpty() //Aseel
+        public void SelectProductIsNullOrEmpty() 
         {
             sut.AddMoney("10");
             string input1 = "";
@@ -349,7 +348,7 @@ namespace CapstoneTests
             Assert.AreEqual(expected2, actual2);
         }
         [TestMethod]
-        public void SelectProductCase() //Aseel
+        public void SelectProductCase() 
         {
             sut.AddMoney("10");
             string input1 = "t1";
@@ -361,7 +360,7 @@ namespace CapstoneTests
             Assert.AreEqual(expected1, actual1); 
         }
         [TestMethod]
-        public void SelectProductTrim() //Aseel
+        public void SelectProductTrim() 
         {
             sut.AddMoney("10");
             string input1 = "t1 ";
